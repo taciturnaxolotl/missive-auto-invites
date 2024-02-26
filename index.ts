@@ -108,7 +108,14 @@ async function getOrganizationId(token: any) {
 async function getUsers() {
   const users: user[] = [];
 
-  const csvFilePath = path.resolve(import.meta.dir, "users.csv");
+  const csvFilePath = fs.existsSync("users.csv")
+    ? path.resolve(import.meta.dir, "users.csv")
+    : "";
+
+  if (csvFilePath == "") {
+    log.error("users.csv not found");
+    process.exit(1);
+  }
 
   const headers = ["first_name", "last_name", "email"];
 
